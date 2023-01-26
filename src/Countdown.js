@@ -1,4 +1,5 @@
 import React from "react";
+import { propTypes } from "react-bootstrap/esm/Image";
 import "./../node_modules/semantic-ui-css/semantic.css"
 
 
@@ -16,6 +17,13 @@ const Countdown = props =>
     </div>
 
 )
+
+Countdown.propType = {
+    name:propTypes.string,
+    houer:propTypes.number,
+    minut:propTypes.number,
+
+}
 
 
 export default Countdown;

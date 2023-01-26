@@ -5,18 +5,18 @@ import uniqid from "uniqid";
 import Countdown from "./Countdown";
 import EditEvents from "./EditEvents";
 
-class App extends Component {
-  constructor() {
+
+  constructor() {class App extends Component {
     super();
     this.state = {
       eating: [
-        { id: 0, name: "śniadanie", houer: "13", minut: "00" },
-        { id: 1, name: "Obiad", houer: "15", minut: "00" },
-        { id: 2, name: "Kolacja", houer: "21", minut: "00" },
+        { id: 0, name: "śniadanie", houer: 13, minut: 0 },
+        { id: 1, name: "Obiad", houer: 15, minut: 0 },
+        { id: 2, name: "Kolacja", houer: 21, minut: 0 },
       ],
       editEating:
       {
-        id: uniqid(), name: "", houer: "", minut: ""
+        id: uniqid(), name: "", houer: -1, minut: -1
       }
 
     };
@@ -37,11 +37,26 @@ class App extends Component {
   }
 
   handSaveEvent() {
-    this.setState(prevState => ({
-      eating: [...prevState.eating, prevState.editEating],
-      editEating: { id: uniqid(), name: "", houer: "", minut: "" }
-    }))
+    this.setState(prevState => {
+      const editedEventsExists = prevState.eating.find(el => el.id === prevState.editEating.id
+      );
+      let updateEvents;
+      if (editedEventsExists) {
+        updateEvents = prevState.eating.map(el => {
+          if (el.id === prevState.editEating.id) return prevState.editEating;
+          else return el;
+        });
+      } else { updateEvents = [...prevState.eating, prevState.editEating] }
+      return {
+        eating: updateEvents,
+        editEating: { id: uniqid(), name: "", houer: -1, minut: -1 }
+      }
+
+    });
+
+
   }
+
 
   handRemove(id) {
     this.setState(prevState => ({
@@ -52,7 +67,7 @@ class App extends Component {
   }
 
   handEdit(id) {
-    this.setState(prevState => ({ editEating: {...prevState.eating[id]} }));
+    this.setState(prevState => ({ editEating: { ...prevState.eating[id] } }));
   }
 
 
